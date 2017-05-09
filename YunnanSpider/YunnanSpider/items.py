@@ -12,4 +12,5 @@ class YunnanspiderItem(scrapy.Item):
     # define the fields for your item here like:
     youji_url = scrapy.Field()
     place_name = scrapy.Field()
+    place_star = scrapy.Field()
     pass

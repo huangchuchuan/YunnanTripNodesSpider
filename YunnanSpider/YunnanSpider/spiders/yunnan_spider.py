@@ -23,14 +23,24 @@ class YunnanSpider(CrawlSpider):
             YunnanSpider.index_flag = False
             yield scrapy.Request(YunnanSpider.start_urls[0], callback=self.parse_item)
 
-        sel = scrapy.Selector(response)
-        sub_urls = sel.xpath('//div[@class="cover-image"]/a/@href').extract()
+        sub_urls = response.xpath('//div[@class="cover-image"]/a/@href').extract()
         for sub_url in sub_urls:
             yield scrapy.Request(url='http://chanyouji.com'+sub_url+'/map', callback=self.parse_detail)
 
     def parse_detail(self, response):
         item = YunnanspiderItem()
         item['youji_url'] = get_base_url(response)[:-4]
-        sel = scrapy.Selector(response)
-        item['place_name'] = sel.xpath('//li[@class="trip-node"]/span/text()').extract()
+        nodes = response.xpath('//li[@class="trip-node"]')
+        place_list = []
+        star_list = []
+        for node in nodes:
+            place_list.append(node.xpath('./span/text()').extract_first())
+            star_node = node.xpath('./div/@class')
+            if star_node and star_node.extract_first().startswith('star'):
+                star = int(star_node.extract_first().split('-')[-1])
+            else:
+                star = 1
+            star_list.append(star)
+        item['place_name'] = place_list
+        item['place_star'] = star_list
         return item
