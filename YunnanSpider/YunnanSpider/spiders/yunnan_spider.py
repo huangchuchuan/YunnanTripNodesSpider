@@ -9,6 +9,17 @@ import traceback
 from YunnanSpider.items import YunnanspiderItem
 
 
+def position_dict_str2unicode(d):
+    desc = d['description']
+    desc = desc.replace(' ', '').replace('"', "'").replace('\r', '').replace('\n', '')
+    desc = 'u"' + desc + '"'
+    d['description'] = eval(desc)
+    title = d['title']
+    title = title.replace(' ', '').replace('"', "'").replace('\r', '').replace('\n', '')
+    title = 'u"' + title + '"'
+    d['title'] = eval(title)
+
+
 class YunnanSpider(CrawlSpider):
     name = 'yunnan_spider'
     allowed_domains = ['chanyouji.com']
@@ -43,4 +54,17 @@ class YunnanSpider(CrawlSpider):
             star_list.append(star)
         item['place_name'] = place_list
         item['place_star'] = star_list
+        item['place_position'] = []
+        js_data = response.xpath('//script').extract()[4]
+        p = js_data.find('Gmaps.map.markers =')
+        if p != -1:
+            line = js_data[p:]
+            p = line.find('[')
+            pe = line.find('}]')
+            array = line[p:pe+2]
+            position_list = eval(array)  # [{lat:xxx, lng:xxx, description:xxx, title:xxx}]
+            for position_dict in position_list:
+                position_dict_str2unicode(position_dict)
+                item['place_position'].append(position_dict)
+
         return item
