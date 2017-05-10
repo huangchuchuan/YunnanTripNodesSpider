@@ -5,7 +5,9 @@ import os
 from collections import defaultdict
 import traceback
 import codecs
-
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 def plot_ntework_image_from_file(json_file, min_path=100):
     if not os.path.exists(json_file):
@@ -63,9 +65,9 @@ def plot_ntework_image_from_file(json_file, min_path=100):
                 place_star[name] = 1.0  # 如果全是低分则认为只有1分
         # 输出好评地点
         file_name = 'good_places.txt'
-        hot_place_dict = sorted(place_star.iteritems(), key=lambda d: d[1], reverse=True)
+        good_place_dict = sorted(place_star.iteritems(), key=lambda d: d[1], reverse=True)
         with codecs.open(file_name, 'w', 'utf-8') as f:
-            for place, star in hot_place_dict:
+            for place, star in good_place_dict:
                 f.write(('%s %.2f'+os.linesep) % (place_position_dict[place], star))
         # 输出热门地点
         file_name = 'hot_places.txt'
@@ -80,8 +82,11 @@ def plot_ntework_image_from_file(json_file, min_path=100):
             nodeDataArray.append({'key': id, 'text': place_position_dict[place]})
         linkDataArray = []
         linkTupleList = []
+        linkdata = []  # 记录路线
         for item in items:
             place_list = item['place_name']
+            place_list = filter(lambda x: x is not None, place_list)
+            linkdata.append(u' -> '.join(place_list))
             last_id = None
             for place in place_list:
                 if last_id is None:
@@ -97,13 +102,16 @@ def plot_ntework_image_from_file(json_file, min_path=100):
         # 转换成字符串
         nodeDataArrayStr = json.dumps(nodeDataArray)
         linkDataArrayStr = json.dumps(linkDataArray)
+        linkDataStr = json.dumps(linkdata)
+        print nodeDataArrayStr
+        print linkDataStr
         # 格式化成js代码
         nodeDataArrayStr = nodeDataArrayStr.replace('"key"', 'key').replace('"text"', 'text')
         linkDataArrayStr = linkDataArrayStr.replace('"from"', 'from').replace('"to"', 'to')
         # 生成新的html
         with open(os.path.join('topo', 'index_template.html')) as f:
             html_content = f.read()
-            html_content = html_content.replace('$NODEDATAARRAY$', nodeDataArrayStr).replace('$LINKDATAARRAY$', linkDataArrayStr)
+            html_content = html_content.replace('$NODEDATAARRAY$', nodeDataArrayStr).replace('$LINKDATAARRAY$', linkDataArrayStr).replace('$LINKDATA$', linkDataStr)
             with codecs.open(os.path.join('topo', 'index.html'), 'w', 'utf-8') as cf:
                 cf.write(html_content)
 
