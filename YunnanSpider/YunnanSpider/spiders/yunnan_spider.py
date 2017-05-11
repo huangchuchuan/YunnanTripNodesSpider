@@ -20,8 +20,9 @@ def position_dict_str2unicode(d):
 
 class YunnanSpider(CrawlSpider):
     name = 'yunnan_spider'
+    search_keyword = '云南'
     allowed_domains = ['chanyouji.com']
-    start_urls = ['http://chanyouji.com/search/trips?q=%E4%BA%91%E5%8D%97']
+    start_urls = ['http://chanyouji.com/search/trips?q={}'.format(search_keyword)]
     rules = [  # 定义爬取URL的规则
         Rule(sle(allow=(u"/search/trips\?page=\d{,4}")), follow=True, callback='parse_item')
     ]

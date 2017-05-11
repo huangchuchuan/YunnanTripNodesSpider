@@ -10,8 +10,9 @@ from YunnanSpider.items import YunnanHotplacesItem
 
 class YunnanHotplacesSpider(CrawlSpider):
     name = 'yunnan_hotplaces_spider'
+    search_keyword = '云南'
     allowed_domains = ['chanyouji.com']
-    start_urls = ['http://chanyouji.com/search/attractions?q=%E4%BA%91%E5%8D%97']
+    start_urls = ['http://chanyouji.com/search/attractions?q={}'.format(search_keyword)]
     rules = [  # 定义爬取URL的规则
         Rule(sle(allow=(u"/search/attractions\?page=\d{,4}")), follow=True, callback='parse_item')
     ]
