@@ -5,27 +5,29 @@
     <script src="go.js"></script>
 </head>
 <body>
-    <div id="myDiagramDiv" style="background-color: whitesmoke; border: solid 1px black; width: 100%; height: 700px"></div>
-    <label>节点： </label>
-    <input type="text" name="keyword" id="keyword"  onfocus="search()" onblur="search()" oninput="search()" onchange="search()" />
-    <br />
-    <br />
-    <span id="show_result">No Match</span>
+<div id="myDiagramDiv" style="background-color: whitesmoke; border: solid 1px black; width: 100%; height: 700px"></div>
+<label>节点： </label>
+<input type="text" name="keyword" id="keyword" onfocus="search()" onblur="search()" oninput="search()"
+       onchange="search()"/>
+<input type="button" id="reload" onclick="reload()" value="重新生成图表" />
+<br/>
+<br/>
+<span id="show_result">No Match</span>
 </body>
 <script>
     function init() {
-    if (window.goSamples) goSamples();  // init for these samples -- you don't need to call this
+//    if (window.goSamples) goSamples();  // init for these samples -- you don't need to call this
 
-    var $ = go.GraphObject.make;  // for conciseness in defining templates
+        var $ = go.GraphObject.make;  // for conciseness in defining templates
 
-    myDiagram = $(go.Diagram, "myDiagramDiv",  // create a Diagram for the DIV HTML element
-                  {
-                    initialContentAlignment: go.Spot.Center,  // center the content
-                    "undoManager.isEnabled": true  // enable undo & redo
-                  });
+        myDiagram = $(go.Diagram, "myDiagramDiv",  // create a Diagram for the DIV HTML element
+            {
+                initialContentAlignment: go.Spot.Center,  // center the content
+                "undoManager.isEnabled": true  // enable undo & redo
+            });
 
-    // define a simple Node template
-    myDiagram.nodeTemplate =
+        // define a simple Node template
+        myDiagram.nodeTemplate =
             $(go.Node, "Auto", // the whole node panel
                 // define the node's outer shape, which will surround the TextBlock
                 $(go.Shape, "Circle", {
@@ -76,36 +78,90 @@
                 )
             );
 
-    // but use the default Link template, by not setting Diagram.linkTemplate
+        // but use the default Link template, by not setting Diagram.linkTemplate
 
-    // create the model data that will be represented by Nodes and Links
-    var nodeDataArray = $NODEDATAARRAY$;
-    var linkDataArray = $LINKDATAARRAY$;
-    myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
-  }
+        // create the model data that will be represented by Nodes and Links
+        var nodeDataArray = $NODEDATAARRAY$;
+        var linkDataArray = $LINKDATAARRAY$;
+        myDiagram.model = new go.GraphLinksModel(nodeDataArray, linkDataArray);
+    }
 
     init();
     var data = $LINKDATA$;
-    // onclick事件
-    function search(){
-        var keyword = document.getElementById('keyword').value;
-        var x;
-        var result_pd = document.getElementById('show_result');
-        var result_data = new Array();
-        for (x in data){
+    // 路线搜索
+function search(){
+    var keywords = document.getElementById('keyword').value;
+    var keyword_array = keywords.split('&');
+    var x, y;
+    var result_pd = document.getElementById('show_result');
+    result_data = new Array();
+    // 筛选路线
+    for (x in data){
+        var count=0;  // 记录包含单个关键字的路线
+        for (y in keyword_array){
+            var keyword = keyword_array[y];
             if(data[x].indexOf(keyword) != -1){
-                result_data.push(data[x]);
+                ++count;
             }
         }
-        var result = "";
-        for (x in result_data){
-            result += x + " | " +result_data[x]+"<br/><br/>";
+        // 判断是否包含足够的关键字
+        if(count==keyword_array.length){
+            result_data.push(data[x]);
         }
-        if(result != ""){
-            result_pd.innerHTML = result;
-        }else{
-            result_pd.innerHTML = 'No Match';
+    }
+    // 显示路线
+    var result = "";
+    for (x in result_data){
+        result += x + " | " +result_data[x]+"<br/><br/>";
+    }
+    if(result != ""){
+        result_pd.innerHTML = result;
+    }else{
+        result_pd.innerHTML = 'No Match';
+    }
+}
+    // 根据搜索结果重新生成图表
+    function reload() {
+        var x, y;
+        // 切分线路成为有向图
+        // 获取所有节点
+        copy_nodeDataArray = new Array();
+        var nodes = new Array();
+        for (x in result_data) {
+            var link = result_data[x];
+            var node_text_array = link.split(' -> ');
+            for (y in node_text_array) {
+                if (nodes.indexOf(node_text_array[y]) == -1) {
+                    var len = nodes.length;
+                    nodes.push(node_text_array[y]);
+                    copy_nodeDataArray.push({key: len, text: node_text_array[y]});
+                }
+            }
         }
+        // 获取所有连线
+        copy_linkDataArray = new Array();
+        var links = new Array();
+        for (x in result_data) {
+            var link = result_data[x];
+            var node_text_array = link.split(' -> ');
+            var last_node_text = "";
+            for (y in node_text_array) {
+                if (y == 0) {
+                    last_node_text = node_text_array[y];
+                } else {
+                    var current_node_text = node_text_array[y];
+                    if (links.indexOf(last_node_text + "-" + current_node_text) == -1) {
+                        var from_id = nodes.indexOf(last_node_text);
+                        var to_id = nodes.indexOf(current_node_text);
+                        copy_linkDataArray.push({from: from_id, to: to_id});
+                        links.push(last_node_text + "-" + current_node_text);
+                    }
+                    last_node_text = current_node_text;
+                }
+            }
+        }
+        // 重新绘制
+        myDiagram.model = new go.GraphLinksModel(copy_nodeDataArray, copy_linkDataArray);
     }
 </script>
 </html>

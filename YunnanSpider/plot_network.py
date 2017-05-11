@@ -15,10 +15,11 @@ def plot_ntework_image_from_file(json_file, min_path=100):
         return
     try:
         items = json.load(open(json_file))  # [{place_position, place_star, place_name, youji_url}]
-        # 构建地名的集合
-        place_list = []
-        place_name_list = []
-        place_position_dict = {}
+
+        place_list = []  # 地名(正式描述)列表(只含有地图标记)
+        place_name_list = []  # 地名(非正式描述)列表（所有）
+        place_position_dict = {}  # 地名(正式描述)->地名(格式化描述:点，市)
+        # 遍历获得地名的信息
         for item in items:
             name_list = item['place_name']
             place_name_list.extend(name_list)
@@ -31,7 +32,9 @@ def plot_ntework_image_from_file(json_file, min_path=100):
                 pe = desc.find('<')  # 结束位置
                 desc = desc[ps: pe]
                 place_position_dict[position_dict['title']] = desc
+        # 构建地名(正式描述)的集合
         place_set = set(place_list)
+        # 统计地名(正式描述)的热度 - 热度根据路线交叉数确定
         place_hot_dict = {}
         tmp_place_list = []
         for place in place_set:
@@ -40,7 +43,7 @@ def plot_ntework_image_from_file(json_file, min_path=100):
             if n > min_path:
                 tmp_place_list.append(place)
         place_set = set(tmp_place_list)
-        # 构建地名-id的字典
+        # 构建地名(正式描述)-id的字典
         place_id = {}
         pid = 0
         for place in place_set:
@@ -77,18 +80,20 @@ def plot_ntework_image_from_file(json_file, min_path=100):
                 f.write(('%s %.2f' + os.linesep) % (place_position_dict[place], star))
         # 构建图数据
         print len(place_id)
-        nodeDataArray = []
+        nodeDataArray = []  # 记录节点 - [{key: id, text: 地名(格式化描述:点，市)}]
         for place, id in place_id.iteritems():
             nodeDataArray.append({'key': id, 'text': place_position_dict[place]})
-        linkDataArray = []
-        linkTupleList = []
-        linkdata = []  # 记录路线
+        linkDataArray = []  # 记录{from, to}
+        linkTupleList = []  # 记录（from_id, to_id）防止添加重复的线
+        linkdata = []  # 记录路线 - [地名(格式化描述:点，市)->地名(格式化描述:点，市)]
         for item in items:
             place_list = item['place_name']
             place_list = filter(lambda x: x is not None, place_list)
-            linkdata.append(u' -> '.join(place_list))
+            place_items = []
             last_id = None
             for place in place_list:
+                if place in place_id:
+                    place_items.append(place_position_dict[place])
                 if last_id is None:
                     if place in place_id:
                         last_id = place_id[place]
@@ -98,13 +103,13 @@ def plot_ntework_image_from_file(json_file, min_path=100):
                             linkTupleList.append((last_id, place_id[place]))
                             linkDataArray.append({'from': last_id, 'to': place_id[place]})
                         last_id = place_id[place]
+            linkdata.append(' -> '.join(place_items))
         print len(linkTupleList)
         # 转换成字符串
         nodeDataArrayStr = json.dumps(nodeDataArray)
         linkDataArrayStr = json.dumps(linkDataArray)
         linkDataStr = json.dumps(linkdata)
-        print nodeDataArrayStr
-        print linkDataStr
+
         # 格式化成js代码
         nodeDataArrayStr = nodeDataArrayStr.replace('"key"', 'key').replace('"text"', 'text')
         linkDataArrayStr = linkDataArrayStr.replace('"from"', 'from').replace('"to"', 'to')
