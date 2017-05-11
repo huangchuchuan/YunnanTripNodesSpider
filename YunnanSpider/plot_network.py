@@ -34,6 +34,7 @@ def plot_ntework_image_from_file(json_file, min_path=100):
                 place_position_dict[position_dict['title']] = desc
         # 构建地名(正式描述)的集合
         place_set = set(place_list)
+        all_place_set = set(place_list)
         # 统计地名(正式描述)的热度 - 热度根据路线交叉数确定
         place_hot_dict = {}
         tmp_place_list = []
@@ -52,12 +53,16 @@ def plot_ntework_image_from_file(json_file, min_path=100):
 
         # 构建place-star_list的字典
         place_star_list = defaultdict(list)
+        all_place_star_list = defaultdict(list)  # 记录评分高的所有地点
         for item in items:
             l = len(item['place_star'])
             for i in range(l):
                 place = item['place_name'][i]
                 if place in place_set:
                     place_star_list[place].append(item['place_star'][i])
+                # 记录所有的评分
+                if place in all_place_set:
+                    all_place_star_list[place].append(item['place_star'][i])
         # 构建place_star字典
         place_star = {}
         for name, star_list in place_star_list.iteritems():
@@ -66,6 +71,22 @@ def plot_ntework_image_from_file(json_file, min_path=100):
                 place_star[name] = sum(new_star_list)/float(len(new_star_list))  # 对高分进行平均
             else:
                 place_star[name] = 1.0  # 如果全是低分则认为只有1分
+        # 构建all_place_star_list字典
+        all_place_star = {}
+        all_place_hot = {}
+        for name, star_list in all_place_star_list.iteritems():
+            all_place_hot[name] = len(star_list)
+            new_star_list = filter(lambda x: x > 1, star_list)  # 去掉1分的评分
+            if len(new_star_list):
+                all_place_star[name] = sum(new_star_list) / float(len(new_star_list))  # 对高分进行平均
+            else:
+                all_place_star[name] = 1.0  # 如果全是低分则认为只有1分
+        # 输出所有地点评分和热度
+        file_name = 'all_places.txt'
+        all_place_dict = sorted(all_place_star.iteritems(), key=lambda d: d[1], reverse=True)
+        with codecs.open(file_name, 'w', 'utf-8') as f:
+            for place, star in all_place_dict:
+                f.write(('%s %.2f %d' + os.linesep) % (place_position_dict[place], star, all_place_hot[place]))
         # 输出好评地点
         file_name = 'good_places.txt'
         good_place_dict = sorted(place_star.iteritems(), key=lambda d: d[1], reverse=True)
