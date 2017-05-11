@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>蝉游记 - 旅行回忆卷轴</title>
+    <meta content="那些一生只见一次的美景你怎么舍得遗忘,10分钟写出漂亮游记" name="description" />
+    <meta content="游记,旅游攻略,自助游" name="keywords" />
+    <meta content="IE=Edge,chrome=1" http-equiv="X-UA-Compatible" />
+    <script type="text/javascript">
+        window.NREUM || (NREUM = {});
+        NREUM.info = {
+            "beacon": "bam.nr-data.net",
+            "errorBeacon": "bam.nr-data.net",
+            "licenseKey": "0c03f505b7",
+            "applicationID": "1959152",
+            "transactionName": "IlhbRxAKWV9QQxpARghHRhwPBEU=",
+            "queueTime": 0,
+            "applicationTime": 47,
+            "ttGuid": "",
+            "agentToken": null,
+            "agent": ""
+        }
+    </script>
+    <script type="text/javascript">
+        window.NREUM || (NREUM = {}), __nr_require = function(e, n, t) {
+            function r(t) {
+                if (!n[t]) {
+                    var o = n[t] = {
+                        exports: {}
+                    };
+                    e[t][0].call(o.exports, function(n) {
+                        var o = e[t][1][n];
+                        return r(o || n)
+                    }, o, o.exports)
+                }
+                return n[t].exports
+            }
+            if ("function" == typeof __nr_require) return __nr_require;
+            for (var o = 0; o < t.length; o++) r(t[o]);
+            return r
+        }({
+            1: [function(e, n, t) {
+                function r() {}
+
+                function o(e, n, t) {
+                    return function() {
+                        return i(e, [c.now()].concat(u(arguments)), n ? null : this, t), n ? void 0 : this
+                    }
+                }
+                var i = e("handle"),
+                    a = e(2),
+                    u = e(3),
+                    f = e("ee").get("tracer"),
+                    c = e("loader"),
+                    s = NREUM;
+                "undefined" == typeof window.newrelic && (newrelic = s);
+                var p = ["setPageViewName", "setCustomAttribute", "setErrorHandler", "finished", "addToTrace", "inlineHit", "addRelease"],
+                    d = "api-",
+                    l = d + "ixn-";
+                a(p, function(e, n) {
+                    s[n] = o(d + n, !0, "api")
+                }), s.addPageAction = o(d + "addPageAction", !0), s.setCurrentRouteName = o(d + "routeName", !0), n.exports = newrelic, s.interaction = function() {
+                    return (new r).get()
+                };
+                var m = r.prototype = {
+                    createTracer: function(e, n) {
+                        var t = {},
+                            r = this,
+                            o = "function" == typeof n;
+                        return i(l + "tracer", [c.now(), e, t], r),
+                            function() {
+                                if (f.emit((o ? "" : "no-") + "fn-start", [c.now(), r, o], t), o) try {
+                                    return n.apply(this, arguments)
+                                } finally {
+                                    f.emit("fn-end", [c.now()], t)
+                                }
+                            }
+                    }
+                };
+                a("setName,setAttribute,save,ignore,onEnd,getContext,end,get".split(","), function(e, n) {
+                    m[n] = o(l + n)
+                }), newrelic.noticeError = function(e) {
+                    "string" == typeof e && (e = new Error(e)), i("err", [e, c.now()])
+                }
+            }, {}],
+            2: [function(e, n, t) {
+                function r(e, n) {
+                    var t = [],
+                        r = "",
+                        i = 0;
+                    for (r in e) o.call(e, r) && (t[i] = n(r, e[r]), i += 1);
+                    return t
+                }
+                var o = Object.prototype.hasOwnProperty;
+                n.exports = r
+            }, {}],
+            3: [function(e, n, t) {
+                function r(e, n, t) {
+                    n || (n = 0), "undefined" == typeof t && (t = e ? e.length : 0);
+                    for (var r = -1, o = t - n || 0, i = Array(o < 0 ? 0 : o); ++r < o;) i[r] = e[n + r];
+                    return i
+                }
+                n.exports = r
+            }, {}],
+            4: [function(e, n, t) {
+                n.exports = {
+                    exists: "undefined" != typeof window.performance && window.performance.timing && "undefined" != typeof window.performance.timing.navigationStart
+                }
+            }, {}],
+            ee: [function(e, n, t) {
+                function r() {}
+
+                function o(e) {
+                    function n(e) {
+                        return e && e instanceof r ? e : e ? f(e, u, i) : i()
+                    }
+
+                    function t(t, r, o, i) {
+                        if (!d.aborted || i) {
+                            e && e(t, r, o);
+                            for (var a = n(o), u = m(t), f = u.length, c = 0; c < f; c++) u[c].apply(a, r);
+                            var p = s[y[t]];
+                            return p && p.push([b, t, r, a]), a
+                        }
+                    }
+
+                    function l(e, n) {
+                        v[e] = m(e).concat(n)
+                    }
+
+                    function m(e) {
+                        return v[e] || []
+                    }
+
+                    function w(e) {
+                        return p[e] = p[e] || o(t)
+                    }
+
+                    function g(e, n) {
+                        c(e, function(e, t) {
+                            n = n || "feature", y[t] = n, n in s || (s[n] = [])
+                        })
+                    }
+                    var v = {},
+                        y = {},
+                        b = {
+                            on: l,
+                            emit: t,
+                            get: w,
+                            listeners: m,
+                            context: n,
+                            buffer: g,
+                            abort: a,
+                            aborted: !1
+                        };
+                    return b
+                }
+
+                function i() {
+                    return new r
+                }
+
+                function a() {
+                    (s.api || s.feature) && (d.aborted = !0, s = d.backlog = {})
+                }
+                var u = "nr@context",
+                    f = e("gos"),
+                    c = e(2),
+                    s = {},
+                    p = {},
+                    d = n.exports = o();
+                d.backlog = s
+            }, {}],
+            gos: [function(e, n, t) {
+                function r(e, n, t) {
+                    if (o.call(e, n)) return e[n];
+                    var r = t();
+                    if (Object.defineProperty && Object.keys) try {
+                        return Object.defineProperty(e, n, {
+                            value: r,
+                            writable: !0,
+                            enumerable: !1
+                        }), r
+                    } catch (i) {}
+                    return e[n] = r, r
+                }
+                var o = Object.prototype.hasOwnProperty;
+                n.exports = r
+            }, {}],
+            handle: [function(e, n, t) {
+                function r(e, n, t, r) {
+                    o.buffer([e], r), o.emit(e, n, t)
+                }
+                var o = e("ee").get("handle");
+                n.exports = r, r.ee = o
+            }, {}],
+            id: [function(e, n, t) {
+                function r(e) {
+                    var n = typeof e;
+                    return !e || "object" !== n && "function" !== n ? -1 : e === window ? 0 : a(e, i, function() {
+                        return o++
+                    })
+                }
+                var o = 1,
+                    i = "nr@id",
+                    a = e("gos");
+                n.exports = r
+            }, {}],
+            loader: [function(e, n, t) {
+                function r() {
+                    if (!x++) {
+                        var e = h.info = NREUM.info,
+                            n = d.getElementsByTagName("script")[0];
+                        if (setTimeout(s.abort, 3e4), !(e && e.licenseKey && e.applicationID && n)) return s.abort();
+                        c(y, function(n, t) {
+                            e[n] || (e[n] = t)
+                        }), f("mark", ["onload", a() + h.offset], null, "api");
+                        var t = d.createElement("script");
+                        t.src = "https://" + e.agent, n.parentNode.insertBefore(t, n)
+                    }
+                }
+
+                function o() {
+                    "complete" === d.readyState && i()
+                }
+
+                function i() {
+                    f("mark", ["domContent", a() + h.offset], null, "api")
+                }
+
+                function a() {
+                    return E.exists && performance.now ? Math.round(performance.now()) : (u = Math.max((new Date).getTime(), u)) - h.offset
+                }
+                var u = (new Date).getTime(),
+                    f = e("handle"),
+                    c = e(2),
+                    s = e("ee"),
+                    p = window,
+                    d = p.document,
+                    l = "addEventListener",
+                    m = "attachEvent",
+                    w = p.XMLHttpRequest,
+                    g = w && w.prototype;
+                NREUM.o = {
+                    ST: setTimeout,
+                    CT: clearTimeout,
+                    XHR: w,
+                    REQ: p.Request,
+                    EV: p.Event,
+                    PR: p.Promise,
+                    MO: p.MutationObserver
+                };
+                var v = "" + location,
+                    y = {
+                        beacon: "bam.nr-data.net",
+                        errorBeacon: "bam.nr-data.net",
+                        agent: "js-agent.newrelic.com/nr-1026.min.js"
+                    },
+                    b = w && g && g[l] && !/CriOS/.test(navigator.userAgent),
+                    h = n.exports = {
+                        offset: u,
+                        now: a,
+                        origin: v,
+                        features: {},
+                        xhrWrappable: b
+                    };
+                e(1), d[l] ? (d[l]("DOMContentLoaded", i, !1), p[l]("load", r, !1)) : (d[m]("onreadystatechange", o), p[m]("onload", r)), f("mark", ["firstbyte", u], null, "api");
+                var x = 0,
+                    E = e(4)
+            }, {}]
+        }, {}, ["loader"]);
+    </script>
+    <meta content="initial-scale=1,user-scalable=no,width=device-width" name="viewport" />
+    <meta content="webkit" name="renderer" />
+    <link href="http://cdn.chanyouji.cn/assets/favicon-28d3ebf155339de4149e853c89268c5e.ico" rel="shortcut icon" />
+    <link href="http://cdn.chanyouji.cn/assets/touch-icon-c76a8f4b30feb31dc695f9d7ecc9e47d.png" rel="apple-touch-icon-precomposed" />
+    <link href="http://cdn.chanyouji.cn/assets/touch-icon-72-80cc1d2402b32d2193cf7f660a788fe4.png" rel="apple-touch-icon-precomposed" sizes="72x72" />
+    <link href="http://cdn.chanyouji.cn/assets/touch-icon-114-cb5717b20da55cb9b43d5e35b4eb6bca.png" rel="apple-touch-icon-precomposed" sizes="114x114" />
+    <link href="application.css" media="all" rel="stylesheet" type="text/css" />
+    <!--[if lt IE 9]><link href="http://cdn.chanyouji.cn/assets/lt_ie9-bb0a21f3a12a4b9359b1944db9aa6686.css" media="screen" rel="stylesheet" type="text/css" /><![endif]-->
+    <!--[if lt IE 7]><link href="http://cdn.chanyouji.cn/assets/ie6-2784a7ac07cf06630699dd2e58132186.css" media="screen" rel="stylesheet" type="text/css" /><![endif]-->
+    <!--[if lt IE 9]><script src="http://cdn.chanyouji.cn/assets/html5-17408d6adb7038f9d8c3f2f3b77ea7d6.js" type="text/javascript"></script><![endif]-->
+    <script type="text/javascript">
+        var _G_current_user_cookie = "tips-ts";
+    </script>
+    <script src="http://cdn.chanyouji.cn/assets/application-68213565115eb52d21cba4efc229c36d.js" type="text/javascript"></script>
+    <meta content="authenticity_token" name="csrf-param" />
+    <meta content="ZgLI+bx9QLlfW8BpLoHp8xy7QMqzYu4nyp9gR2sx6j4=" name="csrf-token" />
+</head>
+
+<body class="empty-layout" id="trips-map">
+    <div class="dialog-trip-thumb">
+        <h1>行程路线</h1>
+        <div class="map_container">
+            <div id="map" class="gmaps4rails_map"></div>
+        </div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        $(function() {
+            var gm = document.createElement('script');
+            gm.type = 'text/javascript';
+            gm.src = 'http://ditu.google.cn/maps/api/js?sensor=false&language=zh&callback=gmap_init';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gm, s);
+        });
+
+        function gmap_init() {
+            Gmaps.map = new Gmaps4RailsGoogle();
+            Gmaps.load_map = function() {
+                Gmaps.map.map_options.language = "zh_cn";
+                Gmaps.map.map_options.zoom = 4;
+                Gmaps.map.map_options.callback = "gmap_callback";
+                Gmaps.map.initialize();
+                Gmaps.map.markers = $MAPINFO$;
+                Gmaps.map.markers_conf.picture = "http://cdn.chanyouji.cn/assets/gmap-marker-50f2247c23f1b98b9bf4d035a254ab9f.png";
+                Gmaps.map.markers_conf.width = 28;
+                Gmaps.map.markers_conf.length = 38;
+                Gmaps.map.create_markers();
+                // Gmaps.map.polylines = [
+                //     [{
+                //         "lat": "26.5823",
+                //         "lng": "101.719002"
+                //     }, {
+                //         "lat": "24.041901",
+                //         "lng": "104.195999"
+                //     }, {
+                //         "lat": "24.114638",
+                //         "lng": "104.124427"
+                //     }, {
+                //         "lat": "24.408501",
+                //         "lng": "103.443001"
+                //     }, {
+                //         "lat": "24.439844",
+                //         "lng": "102.871566"
+                //     }, {
+                //         "lat": "25.0455",
+                //         "lng": "101.528"
+                //     }, {
+                //         "lat": "25.0525",
+                //         "lng": "101.515999"
+                //     }, {
+                //         "lat": "26.5823",
+                //         "lng": "101.719002"
+                //     }]
+                // ];
+                Gmaps.map.polylines_conf.strokeWeight = 3;
+                Gmaps.map.polylines_conf.strokeColor = "#4C84FC";
+                Gmaps.map.create_polylines();
+                Gmaps.map.adjustMapToBounds();
+                Gmaps.map.callback = gmap_callback;
+                Gmaps.map.callback();
+            };
+            Gmaps.loadMaps();
+        }
+    </script>
+    <script type="text/javascript">
+        function gmap_callback() {
+            var list = $('.thumb-list'),
+                ul = $('ul', list);
+
+            ul.width(ul.find('li').length * 152);
+            list.scrollbar({
+                type: 'hor'
+            });
+
+            trip_thumb_gmap_callback([])();
+
+            var hash = location.hash.replace('#', '');
+            if (hash) {
+                var offset = $('li[data-hash="' + hash + '"]', ul).offset();
+                if (offset.left)
+                    list.scrollbar().scrollTo(offset.left - 300);
+            }
+        }
+    </script>
+</body>
+
+</html>
