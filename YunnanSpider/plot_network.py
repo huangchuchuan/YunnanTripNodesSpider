@@ -9,6 +9,7 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+
 def plot_ntework_image_from_file(json_file, min_path=100):
     if not os.path.exists(json_file):
         print 'No such file: %s' % json_file
