@@ -6,6 +6,7 @@ from collections import defaultdict
 import traceback
 import codecs
 import sys
+
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -39,6 +40,9 @@ def plot_ntework_image_from_file(json_file, min_path=100):
         # 统计地名(正式描述)的热度 - 热度根据路线交叉数确定
         place_hot_dict = {}
         tmp_place_list = []
+        # 获取中位数
+        tmp = map(lambda place: place_name_list.count(place), place_set)
+        min_path = min(min_path, (max(tmp) + min(tmp)) / 2)
         for place in place_set:
             n = place_name_list.count(place)
             place_hot_dict[place] = n
@@ -69,7 +73,7 @@ def plot_ntework_image_from_file(json_file, min_path=100):
         for name, star_list in place_star_list.iteritems():
             new_star_list = filter(lambda x: x > 1, star_list)  # 去掉1分的评分
             if len(new_star_list):
-                place_star[name] = sum(new_star_list)/float(len(new_star_list))  # 对高分进行平均
+                place_star[name] = sum(new_star_list) / float(len(new_star_list))  # 对高分进行平均
             else:
                 place_star[name] = 1.0  # 如果全是低分则认为只有1分
         # 构建all_place_star_list字典
@@ -93,7 +97,7 @@ def plot_ntework_image_from_file(json_file, min_path=100):
         good_place_dict = sorted(place_star.iteritems(), key=lambda d: d[1], reverse=True)
         with codecs.open(file_name, 'w', 'utf-8') as f:
             for place, star in good_place_dict:
-                f.write(('%s %.2f'+os.linesep) % (place_position_dict[place], star))
+                f.write(('%s %.2f' + os.linesep) % (place_position_dict[place], star))
         # 输出热门地点
         file_name = 'hot_places.txt'
         hot_place_dict = sorted(place_hot_dict.iteritems(), key=lambda d: d[1], reverse=True)
@@ -138,7 +142,9 @@ def plot_ntework_image_from_file(json_file, min_path=100):
         # 生成新的html
         with open(os.path.join('topo', 'index_template.html')) as f:
             html_content = f.read()
-            html_content = html_content.replace('$NODEDATAARRAY$', nodeDataArrayStr).replace('$LINKDATAARRAY$', linkDataArrayStr).replace('$LINKDATA$', linkDataStr)
+            html_content = html_content.replace('$NODEDATAARRAY$', nodeDataArrayStr).replace('$LINKDATAARRAY$',
+                                                                                             linkDataArrayStr).replace(
+                '$LINKDATA$', linkDataStr)
             with codecs.open(os.path.join('topo', 'index.html'), 'w', 'utf-8') as cf:
                 cf.write(html_content)
 
